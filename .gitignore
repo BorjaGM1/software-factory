@@ -1,0 +1,7 @@
+runs/*
+!runs/.gitkeep
+!runs/fixtures/
+rules/*
+!rules/.gitkeep
+__pycache__/
+.venv/

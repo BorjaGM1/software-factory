@@ -1,0 +1,128 @@
+{
+  "id": "evt-20261121-223815-fb5ce3",
+  "source": "feedback",
+  "kind": "feature-request",
+  "title": "X reply 2123561870331207936: add: Add a flag to the train search that keeps only direct trains with no transfers, applying the result limit after filtering.",
+  "evidence": {
+    "channel": "x-reply",
+    "ref": "2123561870331207936",
+    "url": "https://x.com/demo_jgarcia/status/2123561870331207936",
+    "author": "demo_jgarcia",
+    "received_at": "2026-11-20T09:14:22.000Z",
+    "raw_file": "intake/feedback/samples/05-direct-only.json",
+    "quarantine": {
+      "model": "claude-haiku-5-5",
+      "tools": [],
+      "mcp_servers": [],
+      "cost_usd": 0.00043132
+    },
+    "checks": [
+      {
+        "check": "too-large",
+        "ok": true,
+        "detail": "299 bytes"
+      },
+      {
+        "check": "hidden-text",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "encoded-blob",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "injection-phrase",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "schema",
+        "ok": true,
+        "detail": "ok"
+      },
+      {
+        "check": "type",
+        "ok": true,
+        "detail": "'add'"
+      },
+      {
+        "check": "size",
+        "ok": true,
+        "detail": "summary 122 chars (max 300), 4 acceptance item(s) of [67, 54, 93, 69] chars (max 5 of 250), 5 path(s) (max 6)"
+      },
+      {
+        "check": "paths",
+        "ok": true,
+        "detail": "src/renfe/cli.py, src/renfe/search.py, tests/test_cli.py, tests/test_search.py, README.md"
+      },
+      {
+        "check": "hidden-text",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "url",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "command",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "secrets",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "about-the-factory",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "verbatim-copy",
+        "ok": true,
+        "detail": "longest stretch copied from the feedback: 7 chars"
+      }
+    ]
+  },
+  "untrusted": "@luisgonzaleznf Muy top, ya lo uso a diario. Una petición: ¿se podría poner una opción para que salgan solo trenes directos? En Madrid-Barcelona me mete combinaciones con transbordo entre medias y con el --limit de 10 me quedo sin ver varios directos de la tarde. Algo tipo --direct y listo 🙏",
+  "created_at": "2026-11-21T22:38:18+01:00",
+  "task": {
+    "id": "task-20261121-223815-fb5ce3",
+    "event_id": "evt-20261121-223815-fb5ce3",
+    "type": "add",
+    "summary": "Add a flag to the train search that keeps only direct trains with no transfers, applying the result limit after filtering.",
+    "acceptance": [
+      "With the direct-only flag, every returned train has zero transfers.",
+      "Without the flag, search output is the same as before.",
+      "The result limit is applied after filtering, so up to the limit of direct trains is returned.",
+      "The flag is listed in the CLI help text and the README usage section."
+    ],
+    "allowed_paths": [
+      "src/renfe/cli.py",
+      "src/renfe/search.py",
+      "tests/test_cli.py",
+      "tests/test_search.py",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".githooks/",
+      ".github/",
+      "pyproject.toml",
+      "scripts/",
+      "src/renfe/checkout.py",
+      "src/renfe/config.py",
+      "src/renfe/data/",
+      "src/renfe/legacy.py",
+      "tests/conftest.py",
+      "tests/fakes.py",
+      "tests/test_live.py",
+      "tests/test_pii_check.py",
+      "uv.lock"
+    ]
+  }
+}

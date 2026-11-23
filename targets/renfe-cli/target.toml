@@ -1,0 +1,96 @@
+# The adapter for renfe-cli: everything the engine knows about this project lives here.
+
+name = "renfe-cli"
+# Your clone of the project. The factory only cuts throwaway worktrees from it and leaves local branches there.
+repo = "~/projects/renfe-cli-lab"
+base = "main"
+# Where to get it, for the message of a machine that doesn't have it yet.
+source = "https://github.com/luisgonzaleznf/renfe-cli"
+
+# Identity of the factory's disposable commits. Without it, git's own: whoever runs the factory.
+# commit_author = "Name <name@example.com>"
+# Prepared once per worktree, before the builder and before the gate.
+setup = ["uv sync -q --locked"]
+
+# Paths no task may write. The builder's diff is checked against these before the gate runs.
+forbidden_paths = [
+  "src/renfe/checkout.py",
+  "src/renfe/checkout*",
+  "tests/test_checkout.py",
+  "tests/conftest.py",
+  "tests/fakes.py",
+  ".github/*",
+  "pyproject.toml",
+  "uv.lock",
+  "src/renfe/data/*",
+]
+allowed_paths = ["src/renfe/*", "tests/*", "README.md"]
+
+[verify]
+lock = ["uv lock --check -q", "uv sync -q --locked"]
+test = "uv run pytest -q -p no:cacheprovider -rfE"
+tests_dir = "tests"
+src_dir = "src"
+# The real clock of the CLI, moved ahead by the gate's pytest plugin (factory/plugins/shift_plugin.py).
+clock_module = "renfe.cli"
+clock_shifts = [1, 92, 730]
+# Startup with no system time zone data. Run with a proxy that refuses everything, so it can't reach Renfe.
+startup = [
+  "uv run --locked --no-dev renfe --version",
+  "uv run --locked --no-dev renfe open MADRI BARCE --date tomorrow --no-browser",
+]
+startup_env = { PYTHONTZPATH = "" }
+# A change to these files is a ranking change: the gate sweeps every station query before and after.
+sweep_paths = ["src/renfe/stations.py"]
+sweep_module = "renfe.stations"
+mutants_max = 6
+# Checks a commit message may not claim, on top of the gate's own (live, container, docker, ubuntu): the gate
+# can't re-run them. Regex fragments.
+unverifiable_claims = ["against renfe", "real renfe", "renfe's (?:api|site|web)"]
+
+[builder]
+# Project facts every builder prompt carries.
+notes = [
+  "Never contact Renfe: tests/fakes.py is the fake Renfe.",
+  "Renfe's real behaviour (field values, time zones, which station a code means) is known only from what the repo records: tests/fakes.py, README examples marked 'ran on <date>', and code comments with an observed date. If the right fix depends on Renfe behaviour nothing here records, stop as blocked (need: real-renfe-data): a guess labelled 'not verified' is not a fix.",
+]
+
+# Decisions that belong to the maintainer. A diff that changes these spots goes to `manual`, gate or not.
+[[intent]]
+id = "suggestions-are-hints"
+path = "src/renfe/stations.py"
+marker = "These are hints, never resolved station choices."
+why = "the maintainer wrote that spelling suggestions never become a resolved station"
+
+[[intent]]
+id = "overdue-rule"
+path = "README.md"
+marker = "never while the train runs early"
+why = "the README documents when a train counts as overdue, on purpose"
+
+[[intent]]
+id = "degraded-says-so"
+path = "README.md"
+marker = "If the timetable fails, `schedule_match` is `unavailable` and the top-level `notice` explains why."
+why = "the README promises that output built without fresh data says so in `notice`: stale or partial data never passes silently"
+
+[[intent]]
+id = "legacy-cutoff"
+path = "src/renfe/config.py"
+marker = "NSV_FIRST_SALE_DATE"
+why = "the date the legacy shop stops is a product decision, not a bug"
+
+[triage]
+# kind -> task type. Unknown kinds go to `manual`.
+kinds = { bug-report = "fix", api-shape-changed = "fix", clock-canary = "fix", ci-red = "fix", feature-request = "add", question = "investigate", investigate = "investigate" }
+# Kinds that never reach a builder.
+manual_kinds = ["policy-change", "legacy-shop-removal", "dependency-change"]
+# What the factory can provide when an event says it needs something (`evidence.needs`).
+# A need that isn't listed, or whose probe fails, ends the run as `blocked` before any build.
+[triage.capabilities]
+offline-tests = "true"
+twin = "true"
+container = "command -v docker && docker info"
+renfe-live = "false"
+renfe-account = "false"
+payment = "false"

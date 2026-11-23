@@ -1,0 +1,14 @@
+{
+  "id": "evt-20261121-s8",
+  "source": "human",
+  "kind": "bug-report",
+  "title": "search for today says 'No more trains today' right after warning that the legacy shop failed and trains may be missing",
+  "evidence": {
+    "command": "renfe search MADRI BARCE --date today",
+    "when": "today, before 25 Jan 2027, in the evening, while the legacy shop answers 503",
+    "notice": "Renfe's legacy shop failed, so this list may be missing trains. No more trains today after 20:00; try --date tomorrow.",
+    "why_wrong": "the new system only lists some of the day's trains, so its last one having left proves nothing; a script following the last sentence gives up on trains still to leave"
+  },
+  "untrusted": null,
+  "created_at": "2026-11-21T18:00:00+01:00"
+}

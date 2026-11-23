@@ -1,0 +1,267 @@
+:root {
+  --bg: #0a0c0f;
+  --panel: #12161c;
+  --line: #222932;
+  --text: #eef1f4;
+  --dim: #8b94a1;
+  --faint: #4a525d;
+  --success: #4ade80;
+  --flawed: #f87171;
+  --blocked: #fbbf24;
+  --manual: #60a5fa;
+  --rejected: #c084fc;
+  --running: #e5e7eb;
+  --agent: #c4b5fd;
+  --check: #67e8f9;
+  --human: #fcd34d;
+  --intake: #9ca3af;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "Inter", "Ubuntu Sans", sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, "Ubuntu Sans Mono", monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text); font-family: var(--sans); }
+/* Every block has a fixed size, so nothing moves when its content changes: laid out for 1080 px of height
+   (a window that is shorter is scaled down to fit, see fit() in app.js); a taller one gives runs and rules more room. */
+body {
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 124px 424px 280px minmax(180px, 1fr); gap: 12px;
+  padding: 16px 32px; height: 100vh; max-width: 1100px; margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+}
+ul, ol { list-style: none; }
+h2 { font-size: 16px; line-height: 20px; height: 20px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* header + counters */
+.brand { display: flex; align-items: center; gap: 14px; height: 28px; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
+.tag { font-size: 13px; letter-spacing: .1em; padding: 3px 9px; border: 1px solid var(--faint); border-radius: 4px; color: var(--dim); }
+.conn { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--faint); margin-left: 6px; }
+.conn.live { background: var(--success); }
+.counters { display: flex; gap: 10px; margin-top: 12px; height: 84px; }
+.count { flex: 1; min-width: 0; background: var(--panel); border-radius: 10px; padding: 10px 14px 8px; border-top: 4px solid var(--c, var(--faint)); overflow: hidden; }
+.count .n { display: block; font-size: 42px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.count .l { display: block; margin-top: 5px; font-size: 16px; line-height: 19px; color: var(--dim); letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.count.zero .n { color: var(--faint); }
+
+/* money: on the brand line, right-aligned; its place is kept (invisible) while nothing has cost anything */
+.money { flex: none; width: 460px; justify-content: flex-end; display: flex; gap: 18px; margin-left: auto; align-items: baseline; min-width: 0; overflow: hidden; text-transform: none; letter-spacing: 0; }
+.money.none { visibility: hidden; }
+.money .m { display: flex; align-items: baseline; gap: 7px; min-width: 0; white-space: nowrap; }
+.money .v { font-size: 20px; font-weight: 650; color: var(--text); font-variant-numeric: tabular-nums; }
+.money .l { font-size: 13px; color: var(--dim); letter-spacing: .03em; }
+.now > [hidden] { display: none !important; }
+.panel { background: var(--panel); border-radius: 12px; padding: 16px 24px; min-width: 0; min-height: 0; overflow: hidden; }
+/* long text: never break out of its box, never one letter per line */
+.clamp2, h1, .feed .txt, .rules .txt { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+
+/* run in focus */
+#focus { display: flex; flex-direction: column; }
+#focus > * { flex: none; }
+.focus-head { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; height: 95px; }
+.focus-titles { min-width: 0; flex: 1; }
+.meta { display: flex; align-items: baseline; font-family: var(--mono); font-size: 16px; line-height: 21px; height: 21px; color: var(--dim); margin-bottom: 5px; min-width: 0; white-space: nowrap; overflow: hidden; }
+.meta-main { flex: 1; height: 100%; display: flex; align-items: baseline; min-width: 0; overflow: hidden; }
+.meta .id { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.meta .src { flex: none; color: var(--text); font-family: var(--sans); text-transform: uppercase; letter-spacing: .08em; font-size: 15px; margin-right: 10px; }
+h1 { font-size: 30px; font-weight: 650; line-height: 34px; height: 68px; } /* two lines kept, used or not */
+#run-state { flex: none; width: 168px; height: 44px; display: flex; justify-content: flex-end; }
+.badge {
+  flex: none; font-size: 21px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; text-align: center;
+  min-width: 150px; padding: 8px 14px; border-radius: 8px; color: #0a0c0f; background: var(--c);
+}
+.run-cost { flex: none; width: 300px; height: 100%; text-align: right; padding-left: 14px; font-family: var(--mono); font-size: 15px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+
+/* the "now" box: one fixed slot; what fills it changes, its size never does */
+.now { margin-top: 10px; height: 110px; }
+.now > div { height: 100%; overflow: hidden; border-radius: 0 8px 8px 0; background: #0d1015; }
+.idle { padding: 10px 16px; border-left: 4px solid var(--line); }
+.idle .act-head { color: var(--faint); }
+.said { padding: 10px 18px; border-left: 4px solid var(--c, var(--dim)); }
+.said b, .ask b { display: block; font-size: 13px; line-height: 17px; letter-spacing: .12em; text-transform: uppercase; color: var(--c); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.said p { font-size: 20px; line-height: 26px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; overflow-wrap: anywhere; }
+
+/* the agent at work: newest call on top, older ones fade */
+.activity { padding: 9px 16px 0; border-left: 4px solid var(--agent); }
+.act-head { display: flex; align-items: center; gap: 8px; height: 17px; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--agent); margin-bottom: 4px; }
+.acts { height: 76px; overflow: hidden; }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--agent); animation: blink 1.8s ease-in-out infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+.acts li { display: flex; gap: 12px; align-items: baseline; min-width: 0; font-size: 18px; line-height: 25px; height: 25px; transition: opacity .5s; }
+.acts .tool { flex: none; width: 56px; font-family: var(--mono); font-size: 13px; color: var(--agent); text-transform: uppercase; }
+.acts .txt { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.acts li.age1 { opacity: .62; }
+.acts li.age2 { opacity: .4; }
+.acts li.age3 { opacity: .24; }
+@keyframes slidein { 0% { opacity: 0; height: 0; transform: translateY(-6px); } 100% { opacity: 1; height: 25px; transform: none; } }
+.acts li.flash { animation: slidein .5s ease-out; }
+.badge.running { background: none; color: var(--running); border: 2px solid var(--faint); }
+
+.track { display: flex; margin-top: 14px; height: 90px; }
+.node { flex: 1; position: relative; text-align: center; min-width: 0; }
+.node::before { /* connector */
+  content: ""; position: absolute; top: 14px; left: -50%; width: 100%; height: 3px; background: var(--line);
+}
+.node:first-child::before { display: none; }
+.node.reached::before { background: var(--faint); }
+.dot {
+  position: relative; display: block; width: 30px; height: 30px; margin: 0 auto; border-radius: 50%;
+  background: var(--bg); border: 3px solid var(--line);
+}
+.node.ok .dot { background: var(--success); border-color: var(--success); }
+.node.failed .dot { background: var(--flawed); border-color: var(--flawed); }
+.node.info .dot { background: var(--dim); border-color: var(--dim); }
+.node.started .dot { border-color: var(--running); }
+.node.end .dot { background: var(--c); border-color: var(--c); }
+.node .name { display: block; margin-top: 8px; font-size: 19px; line-height: 23px; color: var(--faint); }
+.node .name, .node .actor { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 2px; }
+.node .actor { display: block; margin-top: 3px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); height: 26px; line-height: 14px; }
+.node .actor small, .feed .who small { display: block; font-size: .85em; letter-spacing: .04em; text-transform: none; opacity: .85; }
+.node.reached .name { color: var(--text); }
+.node.reached .actor { color: var(--a, var(--dim)); }
+
+/* question and answer side by side, each in half the box */
+.now > .ask { display: flex; gap: 10px; background: none; border-radius: 0; }
+.ask > div { flex: 1 1 0; min-width: 0; height: 100%; overflow: hidden; padding: 10px 16px; border-left: 4px solid var(--c, var(--human)); background: #0d1015; font-size: 18px; line-height: 23px; border-radius: 0 8px 8px 0; }
+.ask > div.a { --c: var(--human); }
+.ask > div.a.failed { --c: var(--flawed); }
+.ask p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; overflow-wrap: anywhere; }
+.ask .dec { font-weight: 650; color: var(--c); }
+.ask .why { color: var(--dim); }
+
+/* the feed: the run's last two lines, one line each, newest at the bottom */
+.feed { margin-top: 10px; height: 62px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
+.feed li { flex: none; display: flex; gap: 14px; min-width: 0; height: 29px; font-size: 21px; line-height: 29px; color: var(--dim); overflow: hidden; }
+.feed li:last-child { color: var(--text); }
+.feed li.old { color: var(--faint); }
+.feed .txt { min-width: 0; -webkit-line-clamp: 1; }
+.feed .who { flex: none; width: 84px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--a, var(--dim)); white-space: nowrap; overflow: hidden; }
+.feed .who small { display: none; }
+.feed li.old .who { opacity: .5; }
+.feed li.failed .txt { color: var(--flawed); }
+
+/* gate */
+/* up to 14 checks in two columns of 7 rows; more go to three narrower columns. Never taller than its panel. */
+.checks { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 29px; gap: 2px 28px; height: 215px; overflow: hidden; }
+.checks.many { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px 16px; }
+.checks.many .check { font-size: 16px; gap: 8px; }
+.checks.many .check .m { width: 22px; height: 22px; font-size: 14px; }
+.check { display: flex; align-items: center; gap: 12px; font-size: 19px; padding: 0 6px; border-radius: 6px; min-width: 0; }
+.check .t { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.check .m { flex: none; width: 25px; height: 25px; border-radius: 50%; display: grid; place-items: center; font-size: 16px; font-weight: 800; color: #0a0c0f; background: var(--faint); }
+.check.ok .m { background: var(--success); }
+.check.failed .m { background: var(--flawed); }
+.check.failed { color: var(--flawed); }
+.check.skipped { color: var(--faint); }
+.check.skipped .m { background: none; border: 2px solid var(--faint); color: var(--faint); }
+.check.started .m { background: none; border: 2px solid var(--running); }
+.check.rule .t::before { content: "rule · "; color: var(--human); }
+.empty { font-size: 20px; color: var(--faint); }
+
+/* runs + rules */
+/* runs and rules take what height is left; a list that doesn't fit fades out instead of scrolling the page */
+.bottom { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; min-height: 0; }
+.bottom .panel { display: flex; flex-direction: column; min-height: 0; }
+.bottom ul { flex: 1; min-height: 0; overflow: hidden; margin: 0 -8px; padding: 0 8px; -webkit-mask-image: linear-gradient(#000 calc(100% - 28px), transparent); mask-image: linear-gradient(#000 calc(100% - 28px), transparent); }
+.runs li { min-width: 0; display: flex; align-items: center; gap: 12px; height: 31px; padding: 0 8px; margin: 0 -8px; font-size: 19px; border-radius: 6px; cursor: pointer; }
+.runs li.focus { background: #1a2029; }
+.runs .d { flex: none; width: 14px; height: 14px; border-radius: 50%; background: var(--c, var(--running)); }
+.runs li.live .d { background: none; border: 2px solid var(--running); }
+.runs .t { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.runs .c { flex: none; font-family: var(--mono); font-size: 13px; color: var(--dim); font-variant-numeric: tabular-nums; }
+.runs .s { flex: none; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--c, var(--dim)); }
+.rules li { padding: 8px 0; border-top: 1px solid var(--line); border-radius: 6px; }
+.rules li + li .txt { -webkit-line-clamp: 1; } /* the newest rule gets two lines, older ones one */
+.rules li:first-child { border-top: none; padding-top: 0; }
+.rules .top { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--dim); font-family: var(--mono); min-width: 0; white-space: nowrap; }
+.rules .from { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.rules .st { flex: none; font-family: var(--sans); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--faint); }
+.rules .st.active { background: var(--success); border-color: var(--success); color: #0a0c0f; font-weight: 700; }
+.rules .txt { margin-top: 5px; font-size: 19px; line-height: 24px; }
+footer { position: fixed; right: 12px; bottom: 6px; font-size: 13px; color: var(--faint); }
+
+/* motion: only when something happens */
+@keyframes pop { 0% { transform: scale(.6); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+@keyframes glow { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--g, #fff) 70%, transparent); } 100% { box-shadow: 0 0 0 18px transparent; } }
+@keyframes breathe { 0%, 100% { box-shadow: 0 0 0 0 rgba(229,231,235,.35); } 50% { box-shadow: 0 0 0 9px rgba(229,231,235,0); } }
+@keyframes wash { 0% { background: color-mix(in srgb, var(--g, #fff) 28%, transparent); } 100% { background: transparent; } }
+@keyframes rise { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: none; } }
+@keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.22); } 100% { transform: scale(1); } }
+
+.node.flash .dot { animation: pop .5s ease-out, glow .9s ease-out; }
+.node.started .dot { animation: breathe 1.8s ease-in-out infinite; }
+.node.flash.started .dot { animation: pop .5s ease-out, breathe 1.8s ease-in-out .5s infinite; }
+.check.flash { animation: wash 1.2s ease-out; }
+.check.flash .m { animation: pop .45s ease-out; }
+.count.flash .n { animation: bump .6s ease-out; display: inline-block; }
+.badge.flash { animation: rise .45s ease-out; }
+.feed li.flash { animation: rise .35s ease-out; }
+.rules li.flash { animation: rise .5s ease-out, wash 2.5s ease-out; --g: var(--human); }
+@keyframes switch { 0% { opacity: .25; } 100% { opacity: 1; } }
+.panel.flash { animation: switch .45s ease-out; }
+.ask > div.flash { animation: rise .45s ease-out; }
+/* narrow: a browser pane or a phone (about 480-700 px wide) */
+@media (max-width: 720px) {
+  body { display: flex; flex-direction: column; padding: 14px 14px; gap: 10px; height: auto; min-height: 100vh; }
+  body > * { flex: none; }
+  .brand { flex-wrap: wrap; height: auto; row-gap: 4px; }
+  .money { order: 5; flex-basis: 100%; width: auto; justify-content: flex-start; margin-left: 0; gap: 14px; }
+  .conn { margin-left: auto; }
+  .counters { height: auto; }
+  .focus-head { height: auto; }
+  h1 { line-height: 25px; height: 50px; }
+  #run-state { width: auto; }
+  .badge { min-width: 0; }
+  .track { height: auto; margin-top: 16px; }
+  .node .actor { height: 22px; line-height: 11px; }
+  .now { height: 96px; }
+  .checks, .checks.many { height: auto; grid-auto-rows: auto; }
+  footer { position: static; }
+  .bottom ul { overflow: visible; -webkit-mask-image: none; mask-image: none; }
+  h2 { font-size: 13px; margin-bottom: 10px; }
+  .brand { font-size: 13px; }
+  .counters { display: grid; grid-template-columns: repeat(auto-fit, minmax(68px, 1fr)); gap: 6px; margin-top: 10px; }
+  .count { padding: 8px 8px 6px; border-top-width: 3px; border-radius: 8px; }
+  .count .n { font-size: 28px; }
+  .count .l { font-size: 12px; margin-top: 3px; }
+  .money .v { font-size: 17px; }
+  .money .l { font-size: 11px; }
+  .run-cost { font-size: 11px; width: auto; }
+  .run-cost:empty { display: none; }
+  .activity { padding: 7px 12px 0; }
+  .act-head { font-size: 10px; height: 14px; }
+  .acts { height: 66px; }
+  .acts li { font-size: 14.5px; gap: 8px; height: 22px; line-height: 22px; }
+  .acts .tool { width: 42px; font-size: 10px; }
+  .runs .c { font-size: 10.5px; }
+  .panel { padding: 14px 14px; border-radius: 10px; }
+  .focus-head { gap: 10px; }
+  .meta { font-size: 12px; line-height: 16px; height: 16px; }
+  .meta .src { font-size: 11px; margin-right: 6px; }
+  h1 { font-size: 21px; }
+  .badge { font-size: 13px; padding: 5px 9px; border-radius: 6px; }
+  .track { margin: 18px 0 4px; }
+  .dot { width: 20px; height: 20px; border-width: 2px; }
+  .node::before { top: 9px; height: 2px; }
+  .node .name { font-size: 11.5px; margin-top: 6px; padding: 0; }
+  .node .actor { font-size: 9px; letter-spacing: .02em; line-height: 12px; min-height: 12px; padding: 0; }
+  .now > .ask { gap: 6px; }
+  .ask > div { font-size: 14px; line-height: 18px; padding: 7px 10px; }
+  .ask b, .said b { font-size: 10px; line-height: 13px; }
+  .said { padding: 7px 12px; }
+  .said p { font-size: 15px; line-height: 20px; }
+  .feed { height: 50px; }
+  .feed li { font-size: 15.5px; gap: 10px; height: 23px; line-height: 23px; }
+  .feed .who { width: 58px; font-size: 10px; }
+  .checks { gap: 2px 14px; }
+  .check { font-size: 14.5px; gap: 7px; padding: 3px 4px; }
+  .check .m { width: 19px; height: 19px; font-size: 12px; }
+  .empty { font-size: 15px; }
+  .bottom { grid-template-columns: minmax(0, 1fr); gap: 10px; flex: none; min-height: 0; }
+  .runs li { font-size: 15px; height: 27px; gap: 9px; }
+  .runs .d { width: 11px; height: 11px; }
+  .runs .s { font-size: 11px; }
+  .rules li { padding: 8px 0; }
+  .rules .top { font-size: 12px; }
+  .rules .st { font-size: 10px; }
+  .rules .txt { font-size: 15.5px; line-height: 20px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+footer:empty { display: none; }

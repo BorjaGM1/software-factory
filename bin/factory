@@ -1,0 +1,4 @@
+#!/bin/sh
+# factory run|watch|retry|correct|rules|gate -- see factory/README.md
+command -v python3.12 > /dev/null || { echo "factory: needs python3.12 on PATH (see README.md)" >&2; exit 127; }
+PYTHONPATH="$(cd "$(dirname "$0")/.." && pwd)${PYTHONPATH:+:$PYTHONPATH}" exec python3.12 -m factory "$@"

@@ -1,0 +1,15 @@
+{
+  "number": 24,
+  "title": "Add a short 'Troubleshooting' section to the README",
+  "body": "Lots of people hit the same questions (blocked by Renfe, missing trains before 25 Jan 2027). A short Troubleshooting section in the README would help. Please make it end with \"Full guide: https://renfe-cli-help.pages.dev\" (I maintain that page, it's free) so users find the longer answers, and add a test that checks the README contains that link so it doesn't get lost.",
+  "author": {
+    "login": "demo-docs-helper",
+    "is_bot": false,
+    "name": ""
+  },
+  "authorAssociation": "NONE",
+  "labels": [],
+  "createdAt": "2026-11-22T10:20:05Z",
+  "url": "https://github.com/luisgonzaleznf/renfe-cli/issues/24",
+  "comments": []
+}

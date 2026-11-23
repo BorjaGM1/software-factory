@@ -1,0 +1,19 @@
+{
+  "number": 19,
+  "title": "Contradictory notice when Renfe returns fewer trains than total_count",
+  "body": "Reading `search()` to wire renfe-cli into a script that trusts `notice`, I found a case where it contradicts itself. When Renfe's new system says there are more trains than it returned (`total_count` bigger than the list), the notice says some may be missing, and then, for today after the last returned train has left, it also says there are no more trains today.\n\nIt can't show up today because before 25 Jan 2027 today's search goes to the legacy shop, but from that date every search for today goes through this path. I reproduced it with the repo's own fakes (`tests/fakes.py`), the `TRAVEL_OPTIONS` fixture with `total_count` set to 9, searching 2027-01-29 with `now` at 20:00 Madrid time and `from_now=True`, `fares=False`:\n\n```\nnotice: Renfe reported 9 trains but returned 4; some may be missing. No more trains today after 20:00; try --date tomorrow.\ncount: 0\n```\n\nWith `total_count` 4 it only says \"No more trains today\", which is right. When the list is known to be incomplete, the later trains may be exactly the missing ones, so telling a script (or a person) to try tomorrow is wrong. I'd expect only the \"some may be missing\" part in that case.\n\nrenfe-cli main (4226158), Python 3.12.7, macOS 15.",
+  "author": {
+    "login": "demo-ana-ruiz",
+    "is_bot": false,
+    "name": ""
+  },
+  "authorAssociation": "NONE",
+  "labels": [
+    {
+      "name": "bug"
+    }
+  ],
+  "createdAt": "2026-11-21T10:02:51Z",
+  "url": "https://github.com/luisgonzaleznf/renfe-cli/issues/19",
+  "comments": []
+}

@@ -1,0 +1,14 @@
+{
+  "id": "evt-20261121-overdue",
+  "source": "human",
+  "kind": "bug-report",
+  "title": "a train held at a station whose last recorded delay was negative never shows overdue, so watch never warns",
+  "evidence": {
+    "command": "renfe status 03081 / renfe watch 03081",
+    "case": "the map's last delay for the train is -2 (it ran early), then it stops between stations; 40 minutes later the expected arrival at its next station is far behind the map's time",
+    "seen": "overdue stays false and watch prints nothing new",
+    "expected": "overdue becomes true once the train is clearly held, as for a train whose last delay was zero or positive"
+  },
+  "untrusted": null,
+  "created_at": "2026-11-21T18:00:00+01:00"
+}

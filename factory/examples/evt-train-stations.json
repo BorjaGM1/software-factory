@@ -1,0 +1,14 @@
+{
+  "id": "evt-20261121-trainstations",
+  "source": "human",
+  "kind": "feature-request",
+  "title": "each train in a search should say which station it leaves from and arrives at",
+  "evidence": {
+    "command": "renfe search Madrid Barcelona --date 2027-01-29",
+    "seen": "origin and destination are the whole-city groups (MADRI, BARCE); a direct train doesn't say whether it leaves from Atocha or Chamartin",
+    "where": "the README's own Madrid -> Barcelona example",
+    "expected": "every train carries its own origin and destination station (code and name); the change is additive"
+  },
+  "untrusted": null,
+  "created_at": "2026-11-21T18:00:00+01:00"
+}

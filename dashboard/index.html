@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factory</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span>software factory</span>
+    <span id="synthetic" class="tag" hidden>synthetic replay</span>
+    <div id="money" class="money"></div>
+    <span id="conn" class="conn" title="connection to the log"></span>
+  </div>
+  <div id="counters" class="counters"></div>
+</header>
+
+<section id="focus" class="panel">
+  <div class="focus-head">
+    <div class="focus-titles">
+      <div class="meta"><div id="run-meta" class="meta-main"></div><div id="run-cost" class="run-cost"></div></div>
+      <h1 id="run-title">Waiting for the first event…</h1>
+    </div>
+    <div id="run-state"></div>
+  </div>
+  <ol id="track" class="track"></ol>
+  <!-- one box, always the same size: the human's question and answer, the agent at work, how the run ended, or idle -->
+  <div id="now" class="now">
+    <div id="ask" class="ask" hidden></div>
+    <div id="activity" class="activity" hidden><div class="act-head"><span class="pulse"></span><span id="act-who"></span></div><ul id="acts" class="acts"></ul></div>
+    <div id="said" class="said" hidden><b id="said-head"></b><p id="said-text"></p></div>
+    <div id="idle" class="idle"><span class="act-head">agent · idle</span></div>
+  </div>
+  <ul id="feed" class="feed"></ul>
+</section>
+
+<section id="gate" class="panel">
+  <h2 id="gate-title">Gate</h2>
+  <ul id="checks" class="checks"></ul>
+</section>
+
+<section class="bottom">
+  <div id="runs-panel" class="panel">
+    <h2>Runs</h2>
+    <ul id="runs" class="runs"></ul>
+  </div>
+  <div id="rules-panel" class="panel">
+    <h2>Learned rules</h2>
+    <ul id="rules" class="rules"></ul>
+  </div>
+</section>
+
+<footer id="footer"></footer>
+<script src="app.js"></script>
+</body>
+</html>

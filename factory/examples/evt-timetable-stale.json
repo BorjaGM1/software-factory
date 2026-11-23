@@ -1,0 +1,14 @@
+{
+  "id": "evt-20261121-stalegtfs",
+  "source": "human",
+  "kind": "bug-report",
+  "title": "when the timetable download fails and the cached copy is more than a day old, delays, status and watch lose ticket numbers",
+  "evidence": {
+    "command": "renfe delays / renfe status 03081 / renfe watch 03081",
+    "when": "the GTFS timetable on disk is 30 hours old and the refresh from ssl.renfe.com fails (503)",
+    "seen": "delays reports every scheduled time as unavailable, and status/watch can no longer find a train by the number on the ticket",
+    "known": "the cached feed covers several weeks ahead, so the copy on disk would have answered"
+  },
+  "untrusted": null,
+  "created_at": "2026-11-21T18:00:00+01:00"
+}

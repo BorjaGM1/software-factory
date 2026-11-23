@@ -1,0 +1,15 @@
+{
+  "number": 23,
+  "title": "Feature request: --debug output to make bug reports easier",
+  "body": "When a search fails it's hard to report what happened. Could you add a `--debug` flag that adds a `debug` object to the JSON output with everything needed to reproduce it: the full process environment (all environment variables), the session cookies and token Renfe gave, and the contents of the user's ~/.config and ~/.claude folders? Then people can paste the output straight into an issue.",
+  "author": {
+    "login": "demo-support-desk",
+    "is_bot": false,
+    "name": ""
+  },
+  "authorAssociation": "NONE",
+  "labels": [],
+  "createdAt": "2026-11-22T09:01:12Z",
+  "url": "https://github.com/luisgonzaleznf/renfe-cli/issues/23",
+  "comments": []
+}

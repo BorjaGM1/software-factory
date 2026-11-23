@@ -1,0 +1,125 @@
+{
+  "id": "evt-20261121-223818-fba0e6",
+  "source": "feedback",
+  "kind": "bug-report",
+  "title": "GitHub issue #19: fix: When fewer trains are returned than total_count reports, omit the 'no more trains today' sentence from the notice and keep only the incomplete-list warning.",
+  "evidence": {
+    "channel": "github-issue",
+    "ref": "#19",
+    "url": "https://github.com/luisgonzaleznf/renfe-cli/issues/19",
+    "author": "demo-ana-ruiz",
+    "received_at": "2026-11-21T10:02:51Z",
+    "raw_file": "intake/feedback/samples/06-truncated-list-says-no-more-trains.json",
+    "quarantine": {
+      "model": "claude-haiku-5-5",
+      "tools": [],
+      "mcp_servers": [],
+      "cost_usd": 0.00043532
+    },
+    "checks": [
+      {
+        "check": "too-large",
+        "ok": true,
+        "detail": "1295 bytes"
+      },
+      {
+        "check": "hidden-text",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "encoded-blob",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "injection-phrase",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "schema",
+        "ok": true,
+        "detail": "ok"
+      },
+      {
+        "check": "type",
+        "ok": true,
+        "detail": "'fix'"
+      },
+      {
+        "check": "size",
+        "ok": true,
+        "detail": "summary 156 chars (max 300), 4 acceptance item(s) of [98, 101, 120, 59] chars (max 5 of 250), 2 path(s) (max 6)"
+      },
+      {
+        "check": "paths",
+        "ok": true,
+        "detail": "src/renfe/search.py, tests/test_search.py"
+      },
+      {
+        "check": "hidden-text",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "url",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "command",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "secrets",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "about-the-factory",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "check": "verbatim-copy",
+        "ok": true,
+        "detail": "longest stretch copied from the feedback: 31 chars"
+      }
+    ]
+  },
+  "untrusted": "Issue title: Contradictory notice when Renfe returns fewer trains than total_count\n\nReading `search()` to wire renfe-cli into a script that trusts `notice`, I found a case where it contradicts itself. When Renfe's new system says there are more trains than it returned (`total_count` bigger than the list), the notice says some may be missing, and then, for today after the last returned train has left, it also says there are no more trains today.\n\nIt can't show up today because before 25 Jan 2027 today's search goes to the legacy shop, but from that date every search for today goes through this path. I reproduced it with the repo's own fakes (`tests/fakes.py`), the `TRAVEL_OPTIONS` fixture with `total_count` set to 9, searching 2027-01-29 with `now` at 20:00 Madrid time and `from_now=True`, `fares=False`:\n\n```\nnotice: Renfe reported 9 trains but returned 4; some may be missing. No more trains today after 20:00; try --date tomorrow.\ncount: 0\n```\n\nWith `total_count` 4 it only says \"No more trains today\", which is right. When the list is known to be incomplete, the later trains may be exactly the missing ones, so telling a script (or a person) to try tomorrow is wrong. I'd expect only the \"some may be missing\" part in that case.\n\nrenfe-cli main (4226158), Python 3.12.7, macOS 15.",
+  "created_at": "2026-11-21T22:38:21+01:00",
+  "task": {
+    "id": "task-20261121-223818-fba0e6",
+    "event_id": "evt-20261121-223818-fba0e6",
+    "type": "fix",
+    "summary": "When fewer trains are returned than total_count reports, omit the 'no more trains today' sentence from the notice and keep only the incomplete-list warning.",
+    "acceptance": [
+      "If the reported total exceeds the returned list, the notice warns that some trains may be missing.",
+      "In that case the notice does not claim there are no more trains today, even after the last departure.",
+      "If the returned list matches the reported total, the no-more-trains-today notice still appears after the last departure.",
+      "The count of trains in the output is unchanged by this fix."
+    ],
+    "allowed_paths": [
+      "src/renfe/search.py",
+      "tests/test_search.py"
+    ],
+    "forbidden_paths": [
+      ".githooks/",
+      ".github/",
+      "pyproject.toml",
+      "scripts/",
+      "src/renfe/checkout.py",
+      "src/renfe/config.py",
+      "src/renfe/data/",
+      "src/renfe/legacy.py",
+      "tests/conftest.py",
+      "tests/fakes.py",
+      "tests/test_live.py",
+      "tests/test_pii_check.py",
+      "uv.lock"
+    ]
+  }
+}

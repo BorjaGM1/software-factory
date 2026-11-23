@@ -1,0 +1,29 @@
+# What a task born from user feedback may touch. The quarantine reader proposes paths; these lists decide.
+# Paths in targets/<target>/target.toml under `forbidden_paths` are added to `forbidden` at run time.
+
+[limits]
+raw_max_bytes = 8000          # bigger feedback is rejected before any model sees it
+summary_max_chars = 300           # the reader is asked for 200
+acceptance_max_items = 5
+acceptance_item_max_chars = 250   # the reader is asked for 150: room for its miscounts
+paths_max = 6
+verbatim_max_chars = 70       # longest stretch of the raw text a task may copy word for word
+
+[targets.renfe-cli]
+types = ["fix", "add", "investigate"]
+allowed = ["src/renfe/", "tests/", "README.md"]
+forbidden = [
+  "src/renfe/checkout.py",     # payment path: always the maintainer's call
+  "src/renfe/legacy.py",       # sells tickets; retired by the maintainer (issue #1)
+  "src/renfe/config.py",       # hosts, dates and timeouts Renfe depends on
+  "src/renfe/data/",
+  "tests/fakes.py",            # the twin of Renfe: changing it changes what "passing" means
+  "tests/conftest.py",         # the no-network guard
+  "tests/test_pii_check.py",
+  "tests/test_live.py",        # the only tests that may call Renfe
+  ".github/",
+  ".githooks/",
+  "pyproject.toml",
+  "uv.lock",
+  "scripts/",
+]

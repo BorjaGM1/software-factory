@@ -1,0 +1,21 @@
+{
+  "id": "rule-new-tests-fail-on-base",
+  "born_from": "run-20261121-224830-s8b",
+  "event_id": "evt-20261121-s8b",
+  "text": "Write the test first and run it against the base source before changing src/ (git stash the fix, or write the test before touching the code): every new test must fail on the base, on its assertion, and pass after the change. A test that passes before and after proves nothing.",
+  "check": {
+    "type": "gate-step",
+    "step": "new-tests-fail-on-base"
+  },
+  "status": "active",
+  "created_at": "2026-11-21T22:51:26+01:00",
+  "eval": {
+    "fails_on": "run-20261121-224830-s8b",
+    "passes_on": "run-20261121-225126-s8b"
+  },
+  "activated_at": "2026-11-21T22:53:54+01:00",
+  "seen_in": [
+    "run-20261121-s8b",
+    "run-20261121-stalegtfs-2"
+  ]
+}

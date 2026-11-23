@@ -1,0 +1,14 @@
+{
+  "id": "evt-20261121-s8b",
+  "source": "human",
+  "kind": "bug-report",
+  "title": "today's search hides or keeps trains by comparing clock times, not moments",
+  "evidence": {
+    "command": "renfe search MADRI BARCE --date today",
+    "where": "src/renfe/search.py, the default 'from now' filter: after = minute.time(), then leaves(t).time() >= after",
+    "why_wrong": "it compares the time of day in Madrid with each departure's local clock time; a departure labelled in another time zone, or one on the night the clocks go back, is hidden or kept by the wrong hour",
+    "keep": "an explicit --after keeps its documented local-time meaning"
+  },
+  "untrusted": null,
+  "created_at": "2026-11-21T18:00:00+01:00"
+}

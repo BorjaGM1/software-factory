@@ -1,0 +1,31 @@
+{
+  "id": "task-20261121-223818-fba0e6",
+  "event_id": "evt-20261121-223818-fba0e6",
+  "type": "fix",
+  "summary": "When fewer trains are returned than total_count reports, omit the 'no more trains today' sentence from the notice and keep only the incomplete-list warning.",
+  "acceptance": [
+    "If the reported total exceeds the returned list, the notice warns that some trains may be missing.",
+    "In that case the notice does not claim there are no more trains today, even after the last departure.",
+    "If the returned list matches the reported total, the no-more-trains-today notice still appears after the last departure.",
+    "The count of trains in the output is unchanged by this fix."
+  ],
+  "allowed_paths": [
+    "src/renfe/search.py",
+    "tests/test_search.py"
+  ],
+  "forbidden_paths": [
+    ".githooks/",
+    ".github/",
+    "pyproject.toml",
+    "scripts/",
+    "src/renfe/checkout.py",
+    "src/renfe/config.py",
+    "src/renfe/data/",
+    "src/renfe/legacy.py",
+    "tests/conftest.py",
+    "tests/fakes.py",
+    "tests/test_live.py",
+    "tests/test_pii_check.py",
+    "uv.lock"
+  ]
+}

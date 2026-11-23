@@ -1,0 +1,14 @@
+{
+  "id": "evt-20261121-s4",
+  "source": "human",
+  "kind": "bug-report",
+  "title": "renfe checkout --method aplazame refuses totals between 100 and 150 euros; Renfe's page now offers 'paga en 4 meses' from 100 euros",
+  "evidence": {
+    "command": "renfe checkout MADRI VALEN --date 2027-01-20 --method aplazame --review-only",
+    "exit_code": 2,
+    "stderr_tail": "Renfe requires a total of at least €150 for Aplazame. This checkout totals 120,40 €.",
+    "observed": "the four-month card option is shown on Renfe's payment page for a 120,40 € trip"
+  },
+  "untrusted": null,
+  "created_at": "2026-11-21T18:00:00+01:00"
+}

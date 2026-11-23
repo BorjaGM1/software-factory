@@ -1,0 +1,14 @@
+{
+  "id": "evt-20261121-s9",
+  "source": "human",
+  "kind": "bug-report",
+  "title": "legacy-shop times for Portuguese stations may be one hour off: are they in Madrid or Lisbon time?",
+  "evidence": {
+    "station": "Porto Campanha (94xxx codes), on the Vigo-Porto line",
+    "report": "a departure from Porto shown at 09:15+01:00 when the ticket says 08:15",
+    "known": "the code reads every legacy-shop time as Europe/Madrid wall-clock time (legacy.MADRID)",
+    "unknown": "whether Renfe's legacy shop writes Porto times in Lisbon or Madrid time; tests/fakes.py has no recorded legacy answer for a Portuguese station"
+  },
+  "untrusted": null,
+  "created_at": "2026-11-21T18:00:00+01:00"
+}

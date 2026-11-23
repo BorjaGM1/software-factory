@@ -1,0 +1,64 @@
+{
+  "id": "evt-20261121-223423b871",
+  "source": "canary",
+  "kind": "clock-canary",
+  "title": "Clock canary: on 2027-01-25 the legacy shop's last day has passed and its code is still in 8 files (issue #1)",
+  "evidence": {
+    "failure": "calendar",
+    "twin_mode": "plain",
+    "clock": "2027-01-25T09:00:00+01:00",
+    "target_commit": "4226158",
+    "failed_canaries": [
+      {
+        "canary": "legacy-shop-retired",
+        "what": "the legacy shop's last day (https://github.com/luisgonzaleznf/renfe-cli/issues/1)",
+        "problems": [
+          "2027-01-25 is on or after config.NSV_FIRST_SALE_DATE (2027-01-25): issue #1 says to delete the legacy-shop code, and 88 lines in 8 files still refer to it"
+        ],
+        "seconds": 0.0,
+        "facts": {
+          "cutoff": "2027-01-25",
+          "days_past": 0,
+          "issue": "https://github.com/luisgonzaleznf/renfe-cli/issues/1",
+          "legacy_references": {
+            "src/renfe/checkout.py": 13,
+            "src/renfe/cli.py": 6,
+            "src/renfe/client.py": 1,
+            "src/renfe/config.py": 7,
+            "src/renfe/legacy.py": 35,
+            "src/renfe/retry.py": 5,
+            "src/renfe/search.py": 20,
+            "src/renfe/shop.py": 1
+          },
+          "files": [
+            "src/renfe/checkout.py",
+            "src/renfe/cli.py",
+            "src/renfe/client.py",
+            "src/renfe/config.py",
+            "src/renfe/legacy.py",
+            "src/renfe/retry.py",
+            "src/renfe/search.py",
+            "src/renfe/shop.py"
+          ],
+          "legacy_shop_requests_in_search_today": 0,
+          "checkout_refuses_every_date": "cli.py checkout raises UsageError for day >= NSV_FIRST_SALE_DATE, and no date before it can be asked for any more (not run: checkout code is never executed)"
+        }
+      }
+    ],
+    "rerun": "python -m intake.monitoring --mode plain --clock 2027-01-25T09:00:00+01:00 --check --target <worktree>",
+    "paths": [
+      "src/renfe/checkout.py",
+      "src/renfe/cli.py",
+      "src/renfe/client.py",
+      "src/renfe/config.py",
+      "src/renfe/legacy.py",
+      "src/renfe/retry.py",
+      "src/renfe/search.py",
+      "src/renfe/shop.py"
+    ],
+    "issue": "https://github.com/luisgonzaleznf/renfe-cli/issues/1",
+    "why_not_a_bug": "the date and what to delete were set by the maintainer (config NSV_FIRST_SALE_DATE, issue #1); deleting it removes the checkout command's only shop and README policy"
+  },
+  "untrusted": null,
+  "created_at": "2026-11-21T22:34:23+01:00"
+}

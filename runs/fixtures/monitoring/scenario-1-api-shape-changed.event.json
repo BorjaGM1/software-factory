@@ -1,0 +1,61 @@
+{
+  "id": "evt-20261121-223418b70b",
+  "source": "monitoring",
+  "kind": "api-shape-changed",
+  "title": "Renfe's API changed shape: search-travel leg: missing timestamp (search-new-system)",
+  "evidence": {
+    "failure": "api-changed",
+    "twin_mode": "shape-drift",
+    "clock": "2026-11-21T10:00:00+01:00",
+    "target_commit": "4226158",
+    "failed_canaries": [
+      {
+        "canary": "search-new-system",
+        "what": "Madrid-Barcelona on a day Renfe's new system sells, with fares",
+        "argv": [
+          "renfe",
+          "search",
+          "Madrid",
+          "Barcelona",
+          "--date",
+          "2027-01-29"
+        ],
+        "exit_code": 7,
+        "problems": [
+          "search-travel leg: missing timestamp"
+        ],
+        "seconds": 0.013,
+        "error": {
+          "type": "api_changed",
+          "message": "search-travel leg: missing timestamp",
+          "exit_code": 7,
+          "hint": "Renfe's web API may have changed; re-capture the request and update renfe/search.py."
+        },
+        "requests": [
+          "GET venta.rsv.renfe.com/config/arch-config.json -> 200",
+          "GET api.rsv.renfe.com/user/external-users-login/v1/tokens/public -> 200",
+          "POST api.rsv.renfe.com/browsing/traveloptions/v1/search-travel -> 200"
+        ]
+      }
+    ],
+    "rerun": "python -m intake.monitoring --mode shape-drift --clock 2026-11-21T10:00:00+01:00 --check --target <worktree>",
+    "paths": [
+      "src/renfe/search.py"
+    ],
+    "needs": [
+      "offline-tests",
+      "twin"
+    ],
+    "acceptance": [
+      "`renfe search Madrid Barcelona --date 2027-01-29` against the twin in mode shape-drift exits 0 and lists the same trains, times and cheapest fares as against the plain twin: 03000 2027-01-29T06:30:00+01:00 -> 2027-01-29T09:15:00+01:00, cheapest 30.0 EUR; 00600+00500 2027-01-29T07:00:00+01:00 -> 2027-01-29T12:00:00+01:00, cheapest 40.0 EUR; 03100 2027-01-29T09:00:00+01:00 -> 2027-01-29T11:40:00+01:00, cheapest 50.0 EUR; 03200 2027-01-29T13:00:00+01:00 -> 2027-01-29T15:50:00+01:00, cheapest 30.0 EUR",
+      "`python -m intake.monitoring --mode shape-drift --check --target <worktree>` exits 0, and so does `--mode plain`",
+      "a search-travel leg with neither the old nor the new time fields still stops with exit 7 (api_changed): the parser reads the new shape, it does not silence ApiShapeError",
+      "the offline suite passes as it does on the base; tests/fakes.py (the old shape) is not edited",
+      "a new test feeds the new shape and fails on the base",
+      "the change stays in src/renfe/search.py and tests/; a correct fix exists in about 10 lines of search.py"
+    ],
+    "new_shape": "search-travel legs carry departure_station.departure_timestamp and arrival_station.arrival_timestamp (Madrid local time, ±HHMM, as journey-search writes them) instead of departure_datetime, arrival_datetime and their *_timezone fields"
+  },
+  "untrusted": null,
+  "created_at": "2026-11-21T22:34:18+01:00"
+}

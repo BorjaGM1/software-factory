@@ -1,0 +1,17 @@
+{
+  "id": "rule-human-20261121-stalegtfs-3",
+  "born_from": "run-20261121-stalegtfs-3",
+  "event_id": "evt-20261121-stalegtfs",
+  "text": "The README promises that output built without fresh data says so in `notice`, and stale data never passes silently. This change serves a timetable whose refresh failed with no notice, and the new test asserts `row[\"notice\"] is None`, which locks in the silent behaviour. Keep the fallback to the saved copy, but make it add a notice that the timetable is a saved copy because the refresh failed (the existing notice path for stale or partial data is a good model). Change the test to assert that the notice is present and keep the exit-code check.",
+  "check": {
+    "type": "script",
+    "cmd": null
+  },
+  "status": "proposed",
+  "created_at": "2026-11-22T00:15:38+01:00",
+  "eval": {
+    "fails_on": null,
+    "passes_on": null
+  },
+  "source": "human"
+}
